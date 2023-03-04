@@ -1,0 +1,86 @@
+//patter_detector 3/3/2023 
+// by Ti7a
+module pattern_detector(
+  input clk , rst , stream_in ,
+  output reg pattern_found 
+);
+
+parameter  state_reg_width = 3;
+parameter [state_reg_width-1:0] state0=3'd0,
+                                state1=3'd1, 
+                                state2=3'd2,
+                                state3=3'd3,
+                                state4=3'd4,
+                                state5=3'd5;
+ reg[state_reg_width-1:0] curr_st ,next_st ;
+
+
+// state regester 
+ always@(posedge clk) begin 
+   if(rst) 
+      curr_st <= state0 ;
+    else 
+     curr_st <= next_st;
+ end 
+  
+// next state ??
+always@(*) begin
+      case(curr_st)  
+    state0 : begin 
+              if(stream_in==1)
+                  next_st= state1;
+              else   next_st= state0;
+      end
+
+    state1: begin
+          if(stream_in==1)
+                  next_st= state2;
+              else   next_st= state0;
+     end 
+
+   state2: begin
+          if(stream_in==1)
+                  next_st= state2;
+              else   next_st= state3;
+      end 
+
+   state3: begin
+         if(stream_in==1)
+                  next_st= state4;
+              else   next_st= state0;
+      end
+
+   state4: begin
+          if(stream_in==1)
+                  next_st= state2;
+              else   next_st= state5;
+   
+      end
+
+   state5: begin
+         if(stream_in==1)
+                  next_st= state1;
+              else   next_st= state0;
+  
+      end
+ endcase     
+ end 
+always@(*) begin
+// pattern_found = 0;
+ 
+   case(curr_st) 
+        state5: pattern_found =1;
+        state4: pattern_found =0;
+        state3: pattern_found =0;
+        state2: pattern_found =0;
+        state1: pattern_found =0;
+        state0: pattern_found =0;
+
+
+       //default: pattern_found = 0;
+   endcase
+end
+endmodule  
+    
+
+           

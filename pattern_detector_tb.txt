@@ -1,0 +1,39 @@
+`timescale 1ns/1ps 
+module patt_tb ;
+ parameter clk_period= 10  ;
+ reg clk_tb=0; 
+always#(clk_period/2)clk_tb =~clk_tb ;
+
+reg rst_tb, stream_in_tb ;
+wire pattern_found_tb ;
+
+pattern_detector dut(
+
+.clk(clk_tb),
+.rst(rst_tb),
+.stream_in(stream_in_tb),
+.pattern_found(pattern_found_tb)
+); 
+
+  
+initial begin
+rst_tb=1;
+#10
+rst_tb=0;
+stream_in_tb=0;
+#10
+stream_in_tb=1;
+#10
+stream_in_tb=1;
+#10
+stream_in_tb=0;
+#10
+stream_in_tb=1;
+#10
+stream_in_tb=0;
+#10
+stream_in_tb=0;
+#10
+$finish();
+end 
+endmodule
